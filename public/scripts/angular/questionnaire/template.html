@@ -1,0 +1,75 @@
+<!-- public/scripts/angular/questionnaire/template.html -->
+<div class="ng-cloak">
+    <div class="container animate-in">
+
+        <div class="text-center">
+            <h3>{{questionnaire.title}}</h3>
+        </div>
+
+        <div class="tab-content">
+            <!-- Questionnaire Begins Here -->
+            <div id="Form" class="tab-pane fade in active">
+                <!-- Intro / Description -->
+                <div class="text-center" ng-bind="questionnaire.description"></div>
+                <hr>
+
+                <!-- Form Begins Here -->
+                <form name="Questionnaire" role="form">
+
+                    <div ng-repeat="question in questionnaire.display">
+                        <div class="form-group">
+                            <label for="{{question.linkId}}">
+                                <span ng-bind="question.index"></span> <span ng-bind="question.text"></span>
+                            </label>
+                            <div ng-repeat="choice in question.reference track by $index">
+                                <input type="radio"
+                                       ng-required="true"
+                                       required="required"
+                                       name="{{question.linkId}}"
+                                       ng-model="questionnaire.formModel[question.linkId]"
+                                       ng-value="choice.display"
+                                       ng-change="questionnaire.parsedModel[question.linkId]=choice.property[0].valueInteger"
+                                       ng-click="questionnaire.updateItem(question.linkId,question.text,question.prefix,
+                                       choice.property[0].valueInteger,choice.display,choice.code)">&nbsp;&nbsp;{{choice.display}}
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary ng-cloak" id="view-button" type="submit"
+                            ng-disabled="Questionnaire.$invalid"
+                            ng-click="questionnaire.onSubmit()"
+                            data-toggle="tab" data-target="#success">Submit
+                    </button>
+                </form>
+
+                <!-- Display for development purposes -->
+                <!--<pre>{{ questionnaire.parsedModel | json }}</pre>-->
+                <!--<pre>{{ questionnaire.formModel | json }}</pre>-->
+                <!--<pre>{{ questionnaire.formValues | json}}</pre>-->
+                <!--<pre>{{ questionnaire.display | json }}</pre>-->
+                <!--<pre>{{ questionnaire.testArray }}</pre>-->
+                <!--<pre>{{ Questionnaire | json }}</pre>-->
+            </div>
+            <!-- Questionnaire Ends Here -->
+            <div id="success" class="tab-pane fade">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Thank you for submitting the survey!</h4>
+                        <div class="row">
+                            <div class="col-xs-4">Your SIBDQ total score was:
+                                <div class="pull-right"><h3>{{questionnaire.score}}</h3></div></div>
+                            <div class="col-xs-7">Your SIBDQ category scores were:
+                                <div ng-repeat="category in questionnaire.normScore">
+                                    {{Utils.keys(questionnaire.normScore)[$index]}}: <b>{{category}}</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding-top:0.5em">
+                            <button class="btn btn-default" id="changetabbutton" type="button"
+                                    onclick="window.location='/';">Return Home</button>
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

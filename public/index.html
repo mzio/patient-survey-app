@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <!-- Optimize mobile viewport -->
+    <base href="/"> <!-- Base tag specifies the base URL/target for all relative URLs in a doc -->
+    <title>FHIR Survey Web App</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/main.css">
+    <link rel="stylesheet" href="lib/angular/angular-csp.css">
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="./">Patient Engagement App</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="./">Home <span class="sr-only">(current)</span></a></li>
+                        <li><a href="/surveys">Surveys</a></li>
+                        <li><a href="/medication-tracking">Medications</a></li>
+                        <li><a href="/results">Results</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->
+        </nav>
+        <!--<div class="header clearfix">-->
+                <!--&lt;!&ndash;<a class="navbar-brand" href="#">FHIR App</a>&ndash;&gt;-->
+                <!--<ul class="nav nav-pills pull-right">-->
+                    <!--<li role="presentation" class="active"><a href="/">Home</a></li>-->
+                    <!--<li role="presentation"><a href="/submit-success">About</a></li>-->
+                    <!--<li role="presentation"><a href="#">Contact</a></li>-->
+                <!--</ul>-->
+            <!--<h3 class="text-muted" href="/">Patient Engagement App</h3>-->
+        <!--</div>-->
+
+        <div ui-view class="ng-cloak"> <!-- Angular handles all views -->
+        <!-- Angular routing + other magical stuff goes here -->
+        </div>
+    </div>
+
+
+    <!-- Scripts -->
+    <!-- <script src="node_models/fhir-js-client/dist/fhir-client.js"></script>  <!-- FHIR client -->
+    <!-- External dependencies -->
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-route/angular-route.min.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/d3/d3.min.js"></script> <!-- D3.js -->
+
+    <!-- Angular dependencies -->
+    <script src="scripts/angular/app.js"></script>
+    <!-- main page -->
+    <script src="scripts/angular/main/controller.js"></script>
+    <!-- medicationTrack -->
+    <script src="scripts/angular/medicationTrack/controller.js"></script>
+    <script src="scripts/angular/medicationTrack/providers.js"></script>
+    <script src="scripts/angular/medicationTrack/factory.mymeds.js"></script>
+
+    <!-- questionnaireSet -->
+    <script src="scripts/angular/questionnaireSet/controller.js"></script>
+    <!-- questionnaire -->
+    <script src="scripts/angular/questionnaire/controller.js"></script>
+    <script src="scripts/angular/questionnaire/providers.js"></script>
+
+    <script src="scripts/angular/questionnaire/controller.js"></script>
+
+    <!-- Results -->
+    <script src="scripts/angular/results/controller.js"></script>
+    <script src="scripts/angular/results/factory.score.js"></script>
+
+    <!-- Angular Routing -->
+    <script src="scripts/angular/routes.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.js"></script> <!-- Has rowlink.js from Jasny inserted -->
+</body>
+</html>

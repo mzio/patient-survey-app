@@ -1,0 +1,111 @@
+<!-- public/scripts/angular/questionnaireSet/template.html -->
+<div class="container animate-in">
+
+    <div>
+        <h2>Patient Surveys / Questionnaires</h2>
+        <h4>FHIR STU3 (v1.4.0)</h4>
+        <br>
+        <ul id="mytabs" class="nav nav-tabs" style="margin-bottom: 1em">
+            <li class="active"><a data-toggle="tab" href="#surveys">Available Surveys</a></li>
+            <li><a data-toggle="tab" href="#complete">Completed Surveys</a></li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <div id="surveys" class="tab-pane fade in active">
+            <h4>Inflammatory Bowl Disease</h4>
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <!-- List group -->
+                <ul class="list-group" ng-repeat="questionnaire in questionnaireSet.res">
+                    <li class="list-group-item">
+                        <a ui-sref="questionnaire({id: '{{questionnaire.id}}'})">{{questionnaire.title}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="complete" class="tab-pane fade">
+            <h4>Completed Survey Database</h4>
+            <p style="margin-bottom:1em">Click on any row to pull up the survey's available results.</p>
+            <table class="table table-hover table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>Survey Id</th>
+                        <th>Date Completed</th>
+                        <th>Use Context</th>
+                        <th>Database Id</th>
+                        <th class="text-center">FHIR Resource</th>
+                    </tr>
+                </thead>
+
+                <tbody class="rowlink" data-link="row">
+                    <tr ng-repeat="complete in questionnaireSet.completed">
+
+                            <td><a data-toggle="modal" href="#results_{{complete._id}}"></a>{{complete.questionnaire.display}}</td>
+                            <td>{{complete.authored.substring(0,10)}}</td>
+                            <td>Qualitative Survey</td>
+                            <td>{{complete._id}}</td>
+                            <td class="text-center rowlink-skip"><a data-toggle="modal" href="#{{complete._id}}">Build <span class="glyphicon glyphicon-fire"></span></a></td>
+                    </tr>
+                </tbody>
+
+                <div ng-repeat="complete in questionnaireSet.completed">
+                    <!-- FHIR Resources -->
+                    <div class="modal fade bs-example-modal-lg" id="{{complete._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">FHIR QuestionnaireResponse Resource</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Note: First '_id' key-value pair is an artifact of MongoDB storage and should normally not be considered part of the FHIR resource.</p>
+                                    <pre>{{complete | json}}</pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Results -->
+                    <div class="modal fade" id="results_{{complete._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Results</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-4">Your SIBDQ total score was:
+                                            <div class="pull-right"><h3>{{questionnaireSet.completedTotals[$index]}}</h3></div></div>
+                                        <div class="col-xs-7 pull-right">Your SIBDQ category scores were:
+                                            <div ng-repeat="response in questionnaireSet.completedNorm[$index]">
+                                                <!--{{questionnaireSet.completedNorm[$parent.$index][$index]}}-->
+                                                {{Utils.keys(questionnaireSet.completedNorm[$parent.$index])[$index]}}: <b>{{response}}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <!--<div ng-repeat="score in questionnaireSet.completedScores">-->
+
+                <!--</div>-->
+
+            </table>
+        </div>
+
+    </div>
+
+</div>

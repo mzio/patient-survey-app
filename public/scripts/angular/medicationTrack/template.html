@@ -1,0 +1,189 @@
+<!-- public/scripts/angular/medicationTrack/template.html -->
+<div class="container animate-in">
+    <div>
+        <h2>Personal Medication List</h2>
+        <h4>{{medicationTrack.title}}</h4>
+        <br>
+        <ul id="mytabs" class="nav nav-tabs" style="margin-bottom: 1em">
+            <li class="active"><a data-toggle="tab" href="#myMeds">My Current Medications</a></li>
+            <li><a data-toggle="tab" href="#update">Update Medications</a></li>
+            <li><a data-toggle="tab" href="#history">View History</a></li>
+            <!--<li class="pull-right"><a data-toggle="tab" href="#fhir">Generate FHIR Resource</a></li>-->
+        </ul>
+    </div>
+
+
+    <div class="tab-content">
+        <div id="myMeds" class="tab-pane fade in active">
+            <div class="row">
+                <div ng-repeat="concept in medicationTrack.myMeds[0].list.list">
+                    <div class="col-sm-4">
+
+                        <div class="panel panel-default panel-active">
+                            <a data-toggle="modal" data-target="#myModal">
+                            <div class="panel-body">
+                                <a>{{concept.display}}</a>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="update" class="tab-pane fade">
+            <div ng-bind="medicationTrack.description"></div>
+            <br>
+            <!-- Form Begins Here -->
+            <form name="Update" id="updateMedForm">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Please select the general medications that you are currently taking.</label>
+                                    <div ng-repeat="medication in medicationTrack.list">
+                                        <input type="checkbox" ng-model="medicationTrack.generalModel[medication.code]"
+                                               value="{{medication.code}}">&nbsp;&nbsp;{{medication.display}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>More specific, recognized selections will automatically appear below.</label>
+                                    <div ng-repeat="medication in medicationTrack.sublist">
+                                        <div class="specific-med" ng-show="medicationTrack.generalModel[medication.generalCode] == true">
+                                            <div ng-repeat="med in medication.subMeds">
+                                                <input type="checkbox"
+                                                       ng-model="medicationTrack.specificModel[med.code]"
+                                                       value="{{med.code}}"
+                                                ng-click="medicationTrack.checkDisabled()">&nbsp;&nbsp;{{med.display}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button class="btn btn-primary" type="submit"
+                                        ng-disabled="medicationTrack.disabled"
+                                        data-toggle="tab" data-target="#complete"
+                                        ng-click="medicationTrack.generateMedList()">Continue</button>
+                                <!-- change the data-target to #complete -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- Form ends here -->
+            <!--<pre>{{medicationTrack.medicationList | json }}</pre>-->
+        </div>
+        <div id="complete" class="tab-pane fade">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <label>Thank you for updating your medication list!</label>
+                    <div style="padding-top:0.5em">
+                        <button class="btn btn-default" id="changetabbutton" type="button"
+                                data-toggle="tab" data-target="#myMeds"
+                                ng-click="medicationTrack.saveList();"
+                                onclick="window.location='/medication-tracking';">Return to My Medications</button>
+                    </div>  <!-- hacky reload b/c things are complicated rn -->
+                </div>
+            </div>
+        </div>
+
+
+        <div id="complete" class="tab-pane fade">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <label>Thank you for updating your medication list!</label>
+                    <div style="padding-top:0.5em">
+                        <button class="btn btn-default" id="changetabbutton" type="button"
+                                data-toggle="tab" data-target="#myMeds"
+                                ng-click="medicationTrack.saveList();"
+                        onclick="window.location='/medication-tracking';">Return to My Medications</button>
+                    </div>  <!-- hacky reload b/c things are complicated rn -->
+                </div>
+            </div>
+        </div>
+
+
+        <div id="history" class="tab-pane fade">
+
+            <h4>Medication List Updates</h4>
+            <div class="row">
+                <div class="col-md-12">
+            <table class="table table-hover table-responsive table-striped">
+                <thead>
+                <tr>
+                    <th>Time Updated</th>
+                    <th> </th>
+                    <th class="text-center">Get FHIR Resource</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="medications in medicationTrack.history">
+                    <td>{{medications.date.substring(0,10) + " "+medications.date.substring(12,19) + " (UTC)"}}</td>
+                    <td></td>
+                    <td class="text-center"><a data-toggle="modal" href="#{{medications._id}}">Build <span class="glyphicon glyphicon-fire" aria-hidden="true"></span></a></td>
+                    <!--<td><a data-toggle="modal" href="#{{complete._id}}">Build <span class="glyphicon glyphicon-fire"></span></a></td>-->
+                </tr>
+                </tbody>
+                <div ng-repeat="medications in medicationTrack.history">
+                    <div class="modal fade bs-example-modal-lg" id="{{medications._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">FHIR List Resource</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div><p>Note: First '_id' key-value pair is an artifact of MongoDB storage and should normally not be considered part of the FHIR resource.</p></div>
+                                    <pre>{{medications | json}}</pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Medication List Update Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Medication List Update</h4>
+                            </div>
+                            <div class="modal-body">
+                                ...
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="fhir" class="tab-pane fade">
+            <pre>{{medicationTrack.history | json}}</pre>
+        </div>
+
+    </div>
+
+    <!--<pre>{{medicationTrack.specificModel | json }}</pre>-->
+    <!--<pre>{{medicationTrack.sublist | json }}</pre>-->
+</div>

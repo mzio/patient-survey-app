@@ -1,0 +1,29 @@
+<div class="container animate-in">
+
+    <div class="text-center">
+        <h1>Results</h1>
+        <h5 ng-bind="main.version"></h5>
+        <p>Current FHIR version support: {{main.fhirSupport}}</p>
+    </div>
+    <hr>
+
+    <div class="vis"></div>
+
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            <pre>{{results.lastScore | json}}</pre>
+        </div>
+        <div class="col-sm-4">
+            <pre>{{results.completedNorm | json}}</pre>
+        </div>
+        <div class="col-sm-4">
+            <pre>{{results.completedTotals | json}}</pre>
+        </div>
+        <div class="col-sm-4">
+            <pre>{{results.completed | json}}</pre>
+        </div>
+
+    </div>
+
+</div>

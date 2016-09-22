@@ -1,0 +1,49 @@
+<!-- public/scripts/angular/main/template.home.html -->
+<div class="container animate-in" >
+
+    <div class="text-center">
+        <h1>{{main.title}}</h1>
+        <h5 ng-bind="main.version"></h5>
+        <p>Current FHIR version support: {{main.fhirSupport}}</p>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <a class="panel-text" href="/surveys">
+                <div class="panel panel-default panel-active">
+                    <div class="panel-heading text-center">
+                        <h3 class="panel-title">Complete Surveys</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        Find and fill out available surveys and forms.
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-4">
+            <a class="panel-text" href="/medication-tracking">
+                <div class="panel panel-default panel-active">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">Update Medications</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        Review, update, and track current prescribed medications.
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-4">
+            <a class="panel-text" href="/results">
+                <div class="panel panel-default panel-active">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">Visualize Results</h3>
+                    </div>
+                    <div class="panel-body text-center">
+                        Generate visual insights from collected health data.
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
